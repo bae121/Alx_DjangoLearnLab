@@ -1,5 +1,4 @@
 
-# This is my first Django Project
+This is my first Django Project
 
-
-# Django is a high-level, open-source web framework written in Python that enables rapid development of secure and maintainable websites. Designed with the philosophy of "don't repeat yourself" (DRY), Django encourages clean, reusable code and follows the model-template-view (MTV) architectural pattern. It comes with a powerful admin interface, built-in authentication, and tools for handling common web development tasks like routing, database migrations, and form handling. Django is widely used for building everything from simple websites to complex, data-driven applications, making it a popular choice among developers who value speed, scalability, and security.
+Django is a high-level, open-source web framework written in Python that enables rapid development of secure and maintainable websites. Designed with the philosophy of "don't repeat yourself" (DRY), Django encourages clean, reusable code and follows the model-template-view (MTV) architectural pattern. It comes with a powerful admin interface, built-in authentication, and tools for handling common web development tasks like routing, database migrations, and form handling. Django is widely used for building everything from simple websites to complex, data-driven applications, making it a popular choice among developers who value speed, scalability, and security.
