@@ -1,15 +1,12 @@
-from django.shortcuts import render
-
 # Create your views here.
-from django.http import HttpResponse
+from django.shortcuts import render
 from .models import Book
 from django.views.generic.detail import DetailView
 from .models import Library
 
 def book_list_view(request):
-    books = Book.objects.select_related('author').all()
-    output = "\n".join([f"{book.title} by {book.author.name}" for book in books])
-    return HttpResponse(output, content_type="text/plain")
+   books = Book.objects.all()
+   return render(request, "relationship_app/list_books.html", {"books": books})
 
 
 class LibraryDetailView(DetailView):
