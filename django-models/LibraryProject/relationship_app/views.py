@@ -4,7 +4,8 @@ from .models import Book, Library, UserProfile
 from django.views.generic.detail import DetailView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.decorators import user_passes_test, permission_required
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 from .forms import BookForm 
 
 def book_list_view(request):
@@ -99,4 +100,4 @@ def delete_book(request, pk):
     if request.method == "POST":
         book.delete()
         return redirect('book_list')
-    return render(request, 'relationship_app/book_confirm_delete.html', {'book': book})
+        return render(request, 'relationship_app/book_confirm_delete.html', {'book': book})
