@@ -25,15 +25,9 @@ class LibraryDetailView(DetailView):
 
 
 def register_view(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect("book_list")
-    else:
-        form = UserCreationForm()
-    return render(request, "relationship_app/register.html", {"form": form})
+    path('register/', views.register, name='register'),
+    path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),
 
 def login_view(request):
     if request.method == "POST":
@@ -49,3 +43,9 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return render(request, "relationship_app/logout.html")
+
+from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView
+from . import views
+
+
