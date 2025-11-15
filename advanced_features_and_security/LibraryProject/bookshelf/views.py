@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import permission_required
 from .models import Article
 from .models import Book
 from .forms import BookSearchForm
+from .forms import ExampleForm
+
 
 def book_list(request):
     books = Book.objects.all()
