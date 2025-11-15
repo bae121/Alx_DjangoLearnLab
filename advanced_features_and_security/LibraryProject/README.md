@@ -40,3 +40,22 @@ Configured using `django-csp` to limit external content sources and mitigate XSS
 - Manually tested form submissions with and without CSRF tokens.
 - Verified that invalid input is rejected.
 - Confirmed that CSP headers are present in HTTP responses.
+
+# Django HTTPS Security Configuration
+
+## Django Settings
+- `SECURE_SSL_REDIRECT`: Forces HTTPS
+- `SECURE_HSTS_SECONDS`: Enforces HTTPS for 1 year
+- `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE`: Secure cookies
+- `X_FRAME_OPTIONS`, `SECURE_CONTENT_TYPE_NOSNIFF`, `SECURE_BROWSER_XSS_FILTER`: Secure headers
+
+## Deployment
+- SSL/TLS configured via Nginx
+- HTTP redirected to HTTPS
+- Security headers added at server level
+
+## Review Summary
+- All traffic is encrypted
+- Cookies are secure
+- Browser protections are active
+- Areas for improvement: Add Content Security Policy (CSP), enable logging for suspicious activity
