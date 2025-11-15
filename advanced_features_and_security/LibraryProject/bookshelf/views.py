@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from .models import Article
 from .models import Book
-
+from .forms import BookSearchForm
 
 def book_list(request):
     books = Book.objects.all()
@@ -33,3 +33,15 @@ def article_delete(request, pk):
     article = get_object_or_404(Article, pk=pk)
     article.delete()
     return redirect('article_list')
+
+def book_list(request):
+    form = BookSearchForm(request.GET or None)
+    books = Book.objects.all()
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        if query:
+            books = books.filter(title__icontains=query)
+    return render(request, 'bookshelf/book_list.html', {'books': books, 'form': form})
+
+# The Django forms and ORM above ensures input is validated and queries are parameterized, 
+# preventing SQL injection.
