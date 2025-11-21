@@ -3,6 +3,7 @@ from .models import Library
 from django.shortcuts import render, redirect, get_object_or_404, redirect
 from .models import Book, Library, UserProfile
 from django.views.generic.detail import DetailView
+from .views import my_function_view, MyClassView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
