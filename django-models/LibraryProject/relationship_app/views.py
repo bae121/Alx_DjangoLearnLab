@@ -1,4 +1,5 @@
 # Create your views here.
+from .models import Library
 from django.shortcuts import render, redirect, get_object_or_404, redirect
 from .models import Book, Library, UserProfile
 from django.views.generic.detail import DetailView
