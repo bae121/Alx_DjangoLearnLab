@@ -5,6 +5,8 @@ from .serializers import BookSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as django_filters
 
 
 
@@ -14,8 +16,10 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['title', 'author', 'publication_year']
     search_fields = ['title', 'author__name']
     ordering_fields = ['publication_year', 'title']
+    ordering = ['publication_year']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
