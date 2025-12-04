@@ -9,8 +9,8 @@ urlpatterns = [
     path("profile/", views.profile, name="profile"),
     path("logout/", auth_views.LogoutView.as_view(next_page="login"), name="logout"),
     path("", PostListView.as_view(), name="post-list"),
-    path("post/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
+    path("posts/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
     path("post/new/", PostCreateView.as_view(), name="post-create"),
-    path("post/<int:pk>/edit/", PostUpdateView.as_view(), name="post-update"),
-    path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
+    path("posts/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
+    path("posts/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
 ]
