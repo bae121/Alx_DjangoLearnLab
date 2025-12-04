@@ -43,3 +43,8 @@ footer {
     background-color: #333;
     color: white;
 }
+
+.error { color: red; }
+.success { color: green; }
+.messages { list-style: none; padding: 0; }
+.messages li { margin: 5px 0; }
