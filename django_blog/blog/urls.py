@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, CommentCreateView, CommentUpdateView, CommentDeleteView, PostSearchView, TagFilterView
+from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, CommentCreateView, CommentUpdateView, CommentDeleteView, PostSearchView, TagFilterView, PostByTagListView
 
 urlpatterns = [
     path("register/", views.register, name="register"),
@@ -24,4 +24,5 @@ urlpatterns = [
     # Search and Tag URLs
     path("search/", PostSearchView.as_view(), name="post-search"),
     path("tags/<str:tag>/", TagFilterView.as_view(), name="tag-filter"),
+    path("tags/<slug:tag_slug>/", PostByTagListView.as_view(), name="post-by-tag"),
 ]
