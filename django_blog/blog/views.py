@@ -130,3 +130,17 @@ class PostSearchView(ListView):
                 Q(tags__name__icontains=query)
             ).distinct()
         return Post.objects.all()
+    
+class TagFilterView(ListView):
+    model = Post
+    template_name = "blog/tag_filter.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag = self.kwargs.get("tag")
+        return Post.objects.filter(tags__name__iexact=tag).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.kwargs.get("tag")
+        return context
