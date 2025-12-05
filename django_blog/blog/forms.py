@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile, Post, Comment
+from .models import Profile, Post, Comment, Tag
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -47,3 +47,31 @@ class CommentForm(forms.ModelForm):
         if len(content.strip()) < 3:
             raise forms.ValidationError("Comment must be at least 3 characters long.")
         return content
+
+class PostForm(forms.ModelForm):
+    tags = forms.CharField(
+        required=False,
+        help_text="Enter tags separated by commas",
+        widget=forms.TextInput(attrs={"placeholder": "e.g. Django, Python, WebDev"})
+    )
+
+    class Meta:
+        model = Post
+        fields = ["title", "content", "tags"]
+
+    def save(self, commit=True):
+        post = super().save(commit=False)
+        if commit:
+            post.save()
+
+        tags_str = self.cleaned_data.get("tags", "")
+        tag_names = [t.strip() for t in tags_str.split(",") if t.strip()]
+        
+        post.tags.clear()
+
+        for name in tag_names:
+            tag, created = Tag.objects.get_or_create(name=name)
+            post.tags.add(tag)
+
+        return post
+
