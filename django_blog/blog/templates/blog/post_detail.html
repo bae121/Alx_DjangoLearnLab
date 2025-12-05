@@ -14,5 +14,35 @@
     {% endif %}
 </article>
 
+<hr>
+<h3>Comments</h3>
+<ul class="comment-list">
+    {% for comment in post.comments.all %}
+        <li class="comment-item">
+            <p>{{ comment.content }}</p>
+            <small>By {{ comment.author.username }} on {{ comment.created_at }}</small>
+            {% if user.is_authenticated and user == comment.author %}
+                <div class="comment-actions">
+                    <a href="{% url 'comment-update' comment.pk %}" class="btn">Edit</a>
+                    <a href="{% url 'comment-delete' comment.pk %}" class="btn btn-danger">Delete</a>
+                </div>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No comments yet.</li>
+    {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+    <h4>Add a Comment</h4>
+    <form method="post" action="{% url 'comment-create' post.pk %}" class="comment-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Post Comment</button>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to add a comment.</p>
+{% endif %}
+
 <a href="{% url 'post-list' %}" class="btn">Back to Posts</a>
 {% endblock %}
