@@ -1,4 +1,4 @@
-from rest_framework import viewsets, filters, generics
+from rest_framework import viewsets, filters, generics, permissions
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
@@ -8,7 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('-created_at')
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     # For filtering and searching
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
