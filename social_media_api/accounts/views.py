@@ -6,17 +6,16 @@ from django.contrib.auth import get_user_model
 from .serializers import RegisterSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-
-User = get_user_model()
+from .models import CustomUser
 
 class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        user = User.objects.get(username=response.data['username'])
+        user = get_user_model().objects.get(username=response.data['username'])
         token = Token.objects.get(user=user)
         return Response({
             'token': token.key,
@@ -47,8 +46,8 @@ class FollowUserView(APIView):
 
     def post(self, request, user_id):
         try:
-            target_user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
+            target_user = get_user_model().objects.get(id=user_id)
+        except get_user_model().DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
         if target_user == request.user:
@@ -63,8 +62,8 @@ class UnfollowUserView(APIView):
 
     def post(self, request, user_id):
         try:
-            target_user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
+            target_user = get_user_model().objects.get(id=user_id)
+        except get_user_model().DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
         request.user.following.remove(target_user)
