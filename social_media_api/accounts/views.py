@@ -1,11 +1,10 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from .serializers import RegisterSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 from .models import CustomUser
 
 class RegisterView(generics.CreateAPIView):
@@ -39,15 +38,15 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
-    
 
-class FollowUserView(APIView):
+class FollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
         try:
-            target_user = get_user_model().objects.get(id=user_id)
-        except get_user_model().DoesNotExist:
+            target_user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
         if target_user == request.user:
@@ -57,14 +56,16 @@ class FollowUserView(APIView):
         return Response({"message": f"You are now following {target_user.username}"}, status=status.HTTP_200_OK)
 
 
-class UnfollowUserView(APIView):
+class UnfollowUserView(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
         try:
-            target_user = get_user_model().objects.get(id=user_id)
-        except get_user_model().DoesNotExist:
+            target_user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
         request.user.following.remove(target_user)
         return Response({"message": f"You have unfollowed {target_user.username}"}, status=status.HTTP_200_OK)
+
