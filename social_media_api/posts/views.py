@@ -1,5 +1,5 @@
-from rest_framework import viewsets, filters
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework import viewsets, filters, generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
@@ -29,3 +29,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # This automatically set the author to the logged-in user
         serializer.save(author=self.request.user)
+
+class FeedView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # This get all the users the current user follows
+        following_users = self.request.user.following.all()
+        # This return posts authored by those users with the newest first
+        return Post.objects.filter(author__in=following_users).order_by('-created_at')
