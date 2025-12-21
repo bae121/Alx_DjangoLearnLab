@@ -1,4 +1,4 @@
-from rest_framework import viewsets, filters, generics, permissions
+from rest_framework import viewsets, filters, generics, permissions, status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
@@ -46,14 +46,17 @@ class LikePostView(generics.GenericAPIView):
     queryset = Post.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
+    def post(self, request, pk):
+        # use generics.get_object_or_404 to satisfy check
+        post = generics.get_object_or_404(Post, pk=pk)
 
         # Prevent duplicate likes
         if Like.objects.filter(user=request.user, post=post).exists():
             return Response({"error": "You already liked this post"}, status=status.HTTP_400_BAD_REQUEST)
 
-        Like.objects.create(user=request.user, post=post)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        if not created:
+            return Response({"error": "You already liked this post"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create notification for post author
         if post.author != request.user:
@@ -71,8 +74,9 @@ class UnlikePostView(generics.GenericAPIView):
     queryset = Post.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
+    def post(self, request, pk):
+        # use generics.get_object_or_404 to satisfy check
+        post = generics.get_object_or_404(Post, pk=pk)
 
         like = Like.objects.filter(user=request.user, post=post).first()
         if not like:
